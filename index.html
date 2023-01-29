@@ -8,22 +8,106 @@
   <script defer src="face-api.min.js"></script>
   <script defer src="script.js"></script>
   <style>
+    :root {
+      --width: 1280px;
+      --height: 720px;
+    }
+
     body {
       margin: 0;
       padding: 0;
       width: 100vw;
       height: 100vh;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      justify-content: flex-start;
       align-items: center;
+      font-family: Roboto, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: black;
+      color: white;
+    }
+
+    h1 {
+      position: absolute;
+      font-weight: 100;
+      height: 4rem;
+      width: 1280px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      margin-top: calc(720px - 6rem);
+    }
+
+    strong {
+      font-weight: 900;
+      margin-inline: .7ex;
+    }
+
+    strong::before {
+      content: attr(data-emoji);
     }
 
     canvas {
       position: absolute;
+      transform: rotateY(180deg);
+      width: var(--width);
+      height: var(--height);
     }
+
+    video {
+      transform: rotateY(180deg);
+      width: var(--width);
+      height: var(--height);
+    }
+
+    .faces {
+      font-size: 64px;
+      width: 1280px;
+      height: 720px;
+      position: absolute;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .faces span {
+      opacity: 0;
+      transition: all 2s;
+    }
+
+    .faces .success {
+      opacity: 1;
+      transition-duration: .1s;
+    }
+
+    .gallery {
+      width: 1280px;
+      display: flex;
+      gap: 1rem;
+      height: 50vh;
+      overflow: auto;
+      flex-direction: column;
+    }
+
+    .gallery img[src] {
+      aspect-ratio: 16/9;
+      object-fit: contain;
+      transform: rotateY(180deg);
+      transition: all .1s;
+    }
+
   </style>
 </head>
 <body>
-  <video id="video" width="720" height="560" autoplay muted></video>
+  <video id="video" width="1280px" height="720px" autoplay muted></video>
+  <canvas id="canvas" width="1280px" height="720px" ></canvas>
+  <canvas id="snapshot" width="1280px" height="720px" ></canvas>
+  <h1>Make a <strong id="myprompt"> ... </strong> face</h1>
+  <div class="faces"></div>
+  <hr/>
+  <div class="gallery"></div>
 </body>
 </html>
