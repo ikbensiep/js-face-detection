@@ -1,4 +1,9 @@
-const video = document.getElementById('video')
+const constraints = {
+  audio: false,
+  video: { width: 1280, height: 720 }
+};
+
+const video = document.querySelector('video');
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
@@ -8,11 +13,25 @@ Promise.all([
 ]).then(startVideo)
 
 function startVideo() {
+  navigator.mediaDevices.getUserMedia(constraints)
+  .then((mediaStream) => {
+    video.srcObject = mediaStream;
+    video.onloadedmetadata = () => {
+      video.play();
+    };
+  })
+  .catch((err) => {
+    // always check for errors at the end.
+    console.error(`${err.name}: ${err.message}`);
+  });
+
+  /*
   navigator.getUserMedia(
     { video: {} },
     stream => video.srcObject = stream,
     err => console.error(err)
   )
+  */
 }
 
 video.addEventListener('play', () => {
@@ -25,7 +44,7 @@ video.addEventListener('play', () => {
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
     faceapi.draw.drawDetections(canvas, resizedDetections)
-    faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-    faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
+    //faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+    //faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
   }, 100)
 })
